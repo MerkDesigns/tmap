@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#__nuxt {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #020617;
+  color: #e2e8f0;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: #f1f5f9;
+  box-shadow: 0 0 0 1000px #020617 inset;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.week-slide-next-enter-active,
+.week-slide-next-leave-active,
+.week-slide-prev-enter-active,
+.week-slide-prev-leave-active {
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.week-slide-next-enter-from,
+.week-slide-prev-leave-to {
+  transform: translateX(28px);
+  opacity: 0;
+}
+
+.week-slide-next-leave-to,
+.week-slide-prev-enter-from {
+  transform: translateX(-28px);
+  opacity: 0;
+}
+
+.drop-vanish {
+  animation: dropVanish 180ms ease-out forwards;
+}
+
+@keyframes dropVanish {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+
