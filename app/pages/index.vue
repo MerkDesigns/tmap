@@ -21,6 +21,7 @@ const CONTAINER_HEADER_H = 44
 const TASK_ROW_H = 36
 const MIN_W = 220
 const MIN_H = 140
+const CALENDAR_BAR_WIDTH = 860
 
 type Repeatability = 'daily' | 'weekly' | 'occasional'
 type ContainerRole = 'todo' | 'done' | null
@@ -114,6 +115,7 @@ const roleLabels = { todo: 'To-Do', done: 'Done' }
 
 const viewportRef = ref<HTMLElement | null>(null)
 const calendarBarRef = ref<HTMLElement | null>(null)
+const calendarWrapRef = ref<HTMLElement | null>(null)
 const state = ref<AppState>(createInitialState())
 const selectedDate = ref(formatDateKey(new Date()))
 const weekStart = ref(startOfWeek(new Date()))
@@ -136,6 +138,7 @@ const installDismissed = ref(false)
 let deferredInstallPrompt: BeforeInstallPromptEvent | null = null
 const importThemeInputRef = ref<HTMLInputElement | null>(null)
 const importDataInputRef = ref<HTMLInputElement | null>(null)
+let layoutHotkeyActive = false
 const defaultTheme: Theme = {
   appBg: '#020617',
   appText: '#e2e8f0',
@@ -515,14 +518,17 @@ watch(state, () => {
   window.addEventListener('appinstalled', onAppInstalled)
   clockTimer = setInterval(() => { now.value = new Date() }, 1000)
     window.addEventListener('resize', centerCamera)
-    window.addEventListener('resize', updateCalendarBarHeight)
+    window.addEventListener('resize', clampCalendarPosition)
     window.addEventListener('pointermove', onMove)
     window.addEventListener('pointerup', onUp)
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
     viewportRef.value?.addEventListener('wheel', onViewportWheel, { passive: false })
     document.addEventListener('pointerdown', closeMenus)
-    nextTick(updateCalendarBarHeight)
+    nextTick(() => {
+      updateCalendarBarHeight()
+      clampCalendarPosition()
+    })
   })
 
 watch(now, (value) => {
@@ -556,7 +562,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('beforeinstallprompt', onBeforeInstallPrompt as EventListener)
   window.removeEventListener('appinstalled', onAppInstalled)
     window.removeEventListener('resize', centerCamera)
-    window.removeEventListener('resize', updateCalendarBarHeight)
+    window.removeEventListener('resize', clampCalendarPosition)
     window.removeEventListener('pointermove', onMove)
     window.removeEventListener('pointerup', onUp)
     window.removeEventListener('keydown', onKeyDown)
@@ -957,10 +963,39 @@ function onAppInstalled() {
       minimapVisible.value = false
     }, 3000)
   }
-  function onKeyUp(e: KeyboardEvent) { if (e.code === 'Space') spacePressed.value = false }
+  function clampCalendarPosition() {
+    if (typeof window === 'undefined') return
+    const wrap = calendarWrapRef.value
+    if (!wrap) return
+    const rect = wrap.getBoundingClientRect()
+    if (rect.width >= window.innerWidth - 32) {
+      layoutPositions.calendar.x = Math.round(window.innerWidth / 2)
+      layoutPositions.calendar.y = clamp(layoutPositions.calendar.y, 16, Math.max(16, window.innerHeight - rect.height - 16))
+      return
+    }
+    const halfW = rect.width / 2
+    const maxX = window.innerWidth - halfW - 16
+    const minX = halfW + 16
+    layoutPositions.calendar.x = clamp(layoutPositions.calendar.x, minX, maxX)
+    const maxY = window.innerHeight - rect.height - 16
+    const minY = 16
+    layoutPositions.calendar.y = clamp(layoutPositions.calendar.y, minY, maxY)
+  }
+  function onKeyUp(e: KeyboardEvent) {
+    if (e.code === 'Space') spacePressed.value = false
+    if (layoutHotkeyActive && !(e.ctrlKey && e.altKey)) {
+      layoutHotkeyActive = false
+      if (devLayoutMode.value) toggleDevLayoutMode()
+    }
+  }
   function onKeyDown(e: KeyboardEvent) {
     if (e.code === 'Space') spacePressed.value = true
-    if (e.target && (e.target as HTMLElement).closest('input,textarea,select,[contenteditable="true"]')) return
+    const inEditable = e.target && (e.target as HTMLElement).closest('input,textarea,select,[contenteditable="true"]')
+    if (!inEditable && e.ctrlKey && e.altKey && !layoutHotkeyActive) {
+      layoutHotkeyActive = true
+      if (!devLayoutMode.value) toggleDevLayoutMode()
+    }
+    if (inEditable) return
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') {
       e.preventDefault()
       if (e.shiftKey) redoHistory()
@@ -1949,13 +1984,15 @@ function triggerManualRollover() {
       </div>
     </div>
       <div
+        ref="calendarWrapRef"
         class="absolute z-50 flex items-stretch gap-2"
         data-floating-ui
-        :style="{ left: `${layoutPositions.calendar.x}px`, top: `${layoutPositions.calendar.y}px`, transform: 'translateX(-50%) scale(1.1)', transformOrigin: 'top center' }"
+        :style="{ left: `${layoutPositions.calendar.x}px`, top: `${layoutPositions.calendar.y}px`, transform: 'translateX(-50%)', transformOrigin: 'top center' }"
       >
         <div
           ref="calendarBarRef"
           class="relative overflow-hidden rounded-2xl border theme-panel theme-panel-shadow px-3 py-2 backdrop-blur"
+          :style="{ width: `${CALENDAR_BAR_WIDTH}px` }"
           @pointerdown.stop="devLayoutMode && startLayoutDrag($event, 'calendar')"
         >
           <div class="flex items-center gap-2" :class="devLayoutMode ? 'pointer-events-none' : ''">
