@@ -4,6 +4,54 @@
 
 :root {
   color-scheme: dark;
+  --app-bg: #020617;
+  --app-text: #e2e8f0;
+  --app-text-muted: #94a3b8;
+  --app-text-subtle: #64748b;
+  --canvas-grid: rgba(71, 85, 105, 0.3);
+  --canvas-grid-color: rgba(71, 85, 105, 0.3);
+  --canvas-grid-size: 22px;
+  --canvas-grid-dot: 1px;
+  --canvas-border: rgba(51, 65, 85, 0.8);
+  --panel-bg: rgba(15, 23, 42, 0.92);
+  --panel-border: rgba(51, 65, 85, 0.8);
+  --panel-text: #e2e8f0;
+  --panel-text-muted: #94a3b8;
+  --menu-bg: #0b1220;
+  --menu-border: rgba(51, 65, 85, 0.9);
+  --menu-hover: rgba(30, 41, 59, 0.9);
+  --input-bg: rgba(2, 6, 23, 0.6);
+  --input-border: rgba(71, 85, 105, 0.6);
+  --input-text: #f1f5f9;
+  --input-placeholder: #64748b;
+  --button-bg: rgba(15, 23, 42, 0.9);
+  --button-border: rgba(71, 85, 105, 0.8);
+  --button-text: #cbd5f5;
+  --button-hover: rgba(30, 41, 59, 0.9);
+  --button-primary-bg: #06b6d4;
+  --button-primary-text: #0b1220;
+  --button-primary-hover: #22d3ee;
+  --button-danger-bg: rgba(244, 63, 94, 0.2);
+  --button-danger-text: #fecdd3;
+  --button-danger-hover: rgba(244, 63, 94, 0.3);
+  --button-ghost-bg: rgba(2, 6, 23, 0.8);
+  --button-ghost-border: rgba(71, 85, 105, 0.8);
+  --button-ghost-text: #cbd5f5;
+  --button-ghost-hover: rgba(30, 41, 59, 0.9);
+  --day-bg: rgba(30, 41, 59, 0.8);
+  --day-border: rgba(71, 85, 105, 0.7);
+  --day-text: #e2e8f0;
+  --day-hover-bg: rgba(51, 65, 85, 0.9);
+  --day-selected-bg: #22d3ee;
+  --day-selected-border: rgba(125, 211, 252, 0.7);
+  --day-selected-text: #0b1220;
+  --day-today-ring: #7dd3fc;
+  --divider: rgba(51, 65, 85, 0.8);
+  --shadow-strong: rgba(0, 0, 0, 0.38);
+  --overlay-bg: rgba(2, 6, 23, 0.65);
+  --clock-solid: rgba(255, 255, 255, 0.98);
+  --clock-outline: rgba(255, 255, 255, 0.92);
+  --clock-transparent: rgba(255, 255, 255, 0.26);
 }
 
 html,
@@ -15,8 +63,8 @@ body,
 
 body {
   margin: 0;
-  background: #020617;
-  color: #e2e8f0;
+  background: var(--app-bg);
+  color: var(--app-text);
 }
 
 input,
@@ -24,6 +72,139 @@ button,
 textarea,
 select {
   font: inherit;
+}
+
+.theme-app {
+  color: var(--app-text);
+  background: var(--app-bg);
+}
+
+.theme-text {
+  color: var(--panel-text);
+}
+
+.theme-text-muted {
+  color: var(--panel-text-muted);
+}
+
+.theme-text-subtle {
+  color: var(--app-text-subtle);
+}
+
+.theme-border {
+  border-color: var(--panel-border);
+}
+
+.theme-divider {
+  background: var(--divider);
+}
+
+.theme-panel {
+  background: var(--panel-bg);
+  border-color: var(--panel-border);
+  color: var(--panel-text);
+}
+
+.theme-panel-shadow {
+  box-shadow: 0 16px 32px var(--shadow-strong);
+}
+
+.theme-overlay {
+  background: transparent;
+}
+
+.theme-menu {
+  background: var(--menu-bg);
+  border-color: var(--menu-border);
+  color: var(--panel-text);
+}
+
+.theme-menu-item:hover {
+  background: var(--menu-hover);
+}
+
+.theme-input {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--input-text);
+}
+
+.theme-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.theme-btn {
+  background: var(--button-bg);
+  border-color: var(--button-border);
+  color: var(--button-text);
+}
+
+.theme-btn:hover {
+  background: var(--button-hover);
+}
+
+.theme-hover:hover {
+  background: var(--button-hover);
+}
+
+.theme-btn-primary {
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+}
+
+.theme-btn-primary:hover {
+  background: var(--button-primary-hover);
+}
+
+.theme-btn-danger {
+  background: var(--button-danger-bg);
+  color: var(--button-danger-text);
+}
+
+.theme-btn-danger:hover {
+  background: var(--button-danger-hover);
+}
+
+.theme-btn-ghost {
+  background: var(--button-ghost-bg);
+  border-color: var(--button-ghost-border);
+  color: var(--button-ghost-text);
+}
+
+.theme-btn-ghost:hover {
+  background: var(--button-ghost-hover);
+}
+
+.theme-day {
+  background: var(--day-bg);
+  border-color: var(--day-border);
+  color: var(--day-text);
+}
+
+.theme-day:hover {
+  background: var(--day-hover-bg);
+}
+
+.theme-day-selected {
+  background: var(--day-selected-bg);
+  border-color: var(--day-selected-border);
+  color: var(--day-selected-text);
+}
+
+.theme-day-today {
+  box-shadow: 0 0 0 2px var(--day-today-ring);
+}
+
+.theme-placeholder {
+  border-color: var(--button-primary-bg);
+  background: color-mix(in srgb, var(--button-primary-bg) 22%, transparent);
+  opacity: 0.25;
+}
+
+.theme-canvas {
+  border-color: var(--canvas-border);
+  background-image: radial-gradient(circle at 1px 1px, var(--canvas-grid-color) var(--canvas-grid-dot), transparent 0);
+  background-size: var(--canvas-grid-size) var(--canvas-grid-size);
 }
 
 input:-webkit-autofill,
@@ -55,19 +236,25 @@ select:-webkit-autofill {
   opacity: 0;
 }
 
-.drop-vanish {
-  animation: dropVanish 180ms ease-out forwards;
+.drop-fall {
+  animation: dropFall 520ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  transform-origin: center;
 }
 
-@keyframes dropVanish {
+@keyframes dropFall {
   0% {
     opacity: 1;
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  35% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.96);
   }
 
   100% {
     opacity: 0;
-    transform: scale(0.7);
+    transform: translate(-50%, -50%) scale(0.72);
   }
 }
 
@@ -83,8 +270,8 @@ select:-webkit-autofill {
 
 .liquid-clock--solid {
   background: none;
-  color: rgb(255 255 255 / 0.98);
-  -webkit-text-fill-color: rgb(255 255 255 / 0.98);
+  color: var(--clock-solid);
+  -webkit-text-fill-color: var(--clock-solid);
   -webkit-text-stroke: 0;
   text-shadow: none;
   filter: none;
@@ -93,7 +280,7 @@ select:-webkit-autofill {
 .liquid-clock--transparent {
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.26) 0%,
+    var(--clock-transparent) 0%,
     rgba(224, 242, 254, 0.22) 34%,
     rgba(186, 230, 253, 0.18) 62%,
     rgba(255, 255, 255, 0.14) 100%
@@ -101,7 +288,7 @@ select:-webkit-autofill {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 0.9px rgba(255, 255, 255, 0.26);
+  -webkit-text-stroke: 0.9px var(--clock-transparent);
   text-shadow: none;
   filter: none;
 }
@@ -110,7 +297,7 @@ select:-webkit-autofill {
   background: none;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.92);
+  -webkit-text-stroke: 1px var(--clock-outline);
   text-shadow: none;
   filter: none;
 }
